@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SBB — Jede Verbindung. Ein Klick.</title>
+<meta name="description" content="Fahrplan, Billett und Live-Abfahrten in einer Ansicht. Schneller als am Schalter, klarer als im Netz.">
+<meta name="theme-color" content="#EB0000">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23EB0000'/%3E%3Cpath d='M8 10h16v4H8zm0 8h16v4H8z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Zum Inhalt springen</a>
+
+<header class="site-header">
+  <div class="shell header__inner">
+    <a class="brand" href="#top" aria-label="SBB — Startseite">
+      <span class="brand__mark">SBB</span>
+      <span class="brand__tag">CFF&nbsp;·&nbsp;FFS</span>
+    </a>
+    <nav class="nav" aria-label="Hauptnavigation">
+      <a href="#planner">Reisen</a>
+      <a href="#board">Abfahrten</a>
+      <a href="#deals">Sparbillette</a>
+      <a href="#billette">Billette</a>
+      <a href="#warum">Warum besser</a>
+    </nav>
+    <a class="btn btn--dark header__cta" href="#planner">Billett kaufen</a>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="hero" id="top">
+    <div class="hero__tracks" aria-hidden="true"></div>
+    <div class="shell hero__inner">
+      <p class="eyebrow"><span class="eyebrow__dot" aria-hidden="true"></span>Neu gedacht · Fahrplan 2027</p>
+      <h1>Jede Verbindung.<br><span class="hero__outline">Ein Klick.</span></h1>
+      <p class="hero__lede">Fahrplan, Billett und Live-Abfahrten in einer Ansicht. Kein Login, keine Sackgassen, keine Wartezeit am Schalter.</p>
+      <ul class="hero__facts">
+        <li><strong>2’100</strong><span>Bahnhöfe</span></li>
+        <li><strong>11’500</strong><span>Verbindungen täglich</span></li>
+        <li><strong>89,4&nbsp;%</strong><span>Pünktlichkeit</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="planner-section" id="planner">
+    <div class="shell">
+      <form class="planner" id="planner-form" novalidate>
+        <div class="planner__grid">
+          <div class="field">
+            <label for="from">Von</label>
+            <input id="from" name="from" type="text" list="stations" autocomplete="off" spellcheck="false" placeholder="Zürich HB" required>
+          </div>
+          <button type="button" class="swap" id="swap" aria-label="Start und Ziel tauschen">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M7 4 3 8l4 4V9h9V7H7zm10 16 4-4-4-4v3H8v2h9z" fill="currentColor"/></svg>
+          </button>
+          <div class="field">
+            <label for="to">Nach</label>
+            <input id="to" name="to" type="text" list="stations" autocomplete="off" spellcheck="false" placeholder="Bahnhof eingeben" required>
+          </div>
+          <div class="field">
+            <label for="date">Datum</label>
+            <input id="date" name="date" type="date" required>
+          </div>
+          <div class="field">
+            <label for="time">Abfahrt</label>
+            <input id="time" name="time" type="time" required>
+          </div>
+          <button class="btn btn--primary planner__submit" type="submit">Verbindung suchen</button>
+        </div>
+        <div class="planner__sub">
+          <label class="check"><input type="checkbox" id="direct"> Nur Direktverbindungen</label>
+          <label class="check"><input type="checkbox" id="halbtax" checked> Halbtax</label>
+          <span class="planner__hint">Preise 2.&nbsp;Klasse, inkl. Billettsteuer</span>
+        </div>
+        <datalist id="stations"></datalist>
+      </form>
+
+      <div class="quick">
+        <span class="quick__label">Beliebt</span>
+        <button type="button" class="chip" data-from="Zürich HB" data-to="Bern">Zürich&nbsp;→&nbsp;Bern</button>
+        <button type="button" class="chip" data-from="Bern" data-to="Interlaken Ost">Bern&nbsp;→&nbsp;Interlaken</button>
+        <button type="button" class="chip" data-from="Basel SBB" data-to="Lugano">Basel&nbsp;→&nbsp;Lugano</button>
+        <button type="button" class="chip" data-from="Zürich HB" data-to="Zermatt">Zürich&nbsp;→&nbsp;Zermatt</button>
+      </div>
+
+      <div class="results" id="results" aria-live="polite" aria-atomic="false"></div>
+    </div>
+  </section>
+
+  <section class="board-section" id="board">
+    <div class="shell">
+      <div class="section-head">
+        <div>
+          <h2>Abfahrtstafel</h2>
+          <p>Live aus dem Bahnhof. Zählt mit, jede Sekunde.</p>
+        </div>
+        <span class="live"><span class="live__dot" aria-hidden="true"></span>Live</span>
+      </div>
+
+      <div class="board-tabs" role="tablist" aria-label="Bahnhof wählen">
+        <button type="button" class="tab is-active" role="tab" aria-selected="true" data-station="Zürich HB">Zürich HB</button>
+        <button type="button" class="tab" role="tab" aria-selected="false" data-station="Bern">Bern</button>
+        <button type="button" class="tab" role="tab" aria-selected="false" data-station="Basel SBB">Basel SBB</button>
+        <button type="button" class="tab" role="tab" aria-selected="false" data-station="Luzern">Luzern</button>
+        <button type="button" class="tab" role="tab" aria-selected="false" data-station="Genève">Genève</button>
+        <button type="button" class="tab" role="tab" aria-selected="false" data-station="Lausanne">Lausanne</button>
+      </div>
+
+      <div class="board">
+        <div class="board__head" aria-hidden="true">
+          <span>Abfahrt</span><span>Linie</span><span>Nach</span><span>Gleis</span><span>Auslastung</span><span>In</span>
+        </div>
+        <div id="board-rows"></div>
+      </div>
+      <p class="board__note">Beispieldaten für diese Demo. Echte Abfahrten liefert der offizielle Fahrplan.</p>
+    </div>
+  </section>
+
+  <section class="deals" id="deals">
+    <div class="shell">
+      <div class="section-head section-head--dark">
+        <div>
+          <h2>Sparbillette</h2>
+          <p>Früh buchen, weniger zahlen. Preis gilt pro Person und Fahrt.</p>
+        </div>
+      </div>
+      <div class="deals__grid">
+        <article class="deal">
+          <p class="deal__kicker">Südschweiz</p>
+          <h3>Lugano</h3>
+          <p class="deal__meta">ab Zürich HB · 2&nbsp;h 45</p>
+          <p class="deal__price"><span>ab</span> CHF 29.–</p>
+          <button type="button" class="btn btn--ghost" data-from="Zürich HB" data-to="Lugano">Verbindung ansehen</button>
+        </article>
+        <article class="deal">
+          <p class="deal__kicker">Berner Oberland</p>
+          <h3>Interlaken</h3>
+          <p class="deal__meta">ab Bern · 1&nbsp;h 52</p>
+          <p class="deal__price"><span>ab</span> CHF 19.–</p>
+          <button type="button" class="btn btn--ghost" data-from="Bern" data-to="Interlaken Ost">Verbindung ansehen</button>
+        </article>
+        <article class="deal">
+          <p class="deal__kicker">Wallis</p>
+          <h3>Zermatt</h3>
+          <p class="deal__meta">ab Visp · 1&nbsp;h 06</p>
+          <p class="deal__price"><span>ab</span> CHF 39.–</p>
+          <button type="button" class="btn btn--ghost" data-from="Visp" data-to="Zermatt">Verbindung ansehen</button>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="products" id="billette">
+    <div class="shell">
+      <div class="section-head section-head--dark">
+        <div>
+          <h2>Billette, die man versteht</h2>
+          <p>Drei Produkte, ein Preis. Ohne Kleingedrucktes im Kleingedruckten.</p>
+        </div>
+      </div>
+      <div class="products__grid">
+        <article class="product">
+          <h3>Einzelbillett</h3>
+          <p class="product__price">ab CHF 2.60</p>
+          <ul>
+            <li>Gilt für eine Fahrt, 2.&nbsp;Klasse</li>
+            <li>Halbtax wird automatisch abgezogen</li>
+            <li>Umtausch bis 1 Minute vor Abfahrt</li>
+          </ul>
+          <a class="btn btn--ghost" href="#planner">Strecke suchen</a>
+        </article>
+        <article class="product product--red">
+          <h3>Halbtax</h3>
+          <p class="product__price">CHF 190.– <span>/ Jahr</span></p>
+          <ul>
+            <li>50&nbsp;% auf fast alle Billette</li>
+            <li>Gilt auch für Bergbahnen und Schiffe</li>
+            <li>Amortisiert sich ab 8 Fahrten</li>
+          </ul>
+          <a class="btn btn--dark" href="#planner">Mit Halbtax rechnen</a>
+        </article>
+        <article class="product product--dark">
+          <h3>GA Travelcard</h3>
+          <p class="product__price">CHF 3’860.– <span>/ Jahr</span></p>
+          <ul>
+            <li>Unbegrenzt durch die ganze Schweiz</li>
+            <li>Alle Zonen, alle Linien, alle Tage</li>
+            <li>Monatlich kündbar</li>
+          </ul>
+          <a class="btn btn--light" href="#planner">Verbindung prüfen</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="why" id="warum">
+    <div class="shell">
+      <div class="section-head section-head--dark">
+        <div>
+          <h2>Vier Dinge, die besser sind</h2>
+          <p>Weil ein Fahrplan kein Formular sein muss.</p>
+        </div>
+      </div>
+      <ol class="why__list">
+        <li>
+          <span class="why__num">01</span>
+          <h3>Ein Suchfeld statt fünf Schritte</h3>
+          <p>Von, Nach, Zeit — fertig. Die Suche startet, während du tippst, und merkt sich deine letzten Ziele.</p>
+        </li>
+        <li>
+          <span class="why__num">02</span>
+          <h3>Preis vor dem Klick</h3>
+          <p>Jede Verbindung zeigt sofort den tiefsten Preis, mit und ohne Halbtax. Keine Überraschung im Warenkorb.</p>
+        </li>
+        <li>
+          <span class="why__num">03</span>
+          <h3>Tafel, die mitdenkt</h3>
+          <p>Gleis, Auslastung und Countdown pro Abfahrt. Was weg ist, verschwindet — ohne Neuladen.</p>
+        </li>
+        <li>
+          <span class="why__num">04</span>
+          <h3>Barrierefrei ab Werk</h3>
+          <p>Tastaturbedienbar, Screenreader-Ansagen für Resultate, 4.5:1 Kontrast und ein sichtbarer Fokus.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="shell footer__inner">
+    <div class="footer__brand">
+      <span class="brand__mark brand__mark--light">SBB</span>
+      <p>Jede Verbindung. Ein Klick.</p>
+    </div>
+    <nav class="footer__nav" aria-label="Fusszeile">
+      <a href="#planner">Fahrplan</a>
+      <a href="#board">Abfahrten</a>
+      <a href="#deals">Sparbillette</a>
+      <a href="#billette">Billette</a>
+      <a href="#warum">Warum besser</a>
+    </nav>
+    <p class="footer__legal">
+      Inoffizielles Demo-Projekt, gestaltet als Hommage an den Schweizer öffentlichen Verkehr.
+      Keine Verbindung zur SBB AG, keine echten Fahrplan- oder Verkaufsdaten.
+    </p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
